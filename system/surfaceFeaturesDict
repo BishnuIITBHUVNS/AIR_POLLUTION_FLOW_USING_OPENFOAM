@@ -1,0 +1,39 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      surfaceFeaturesDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// List of surface files to extract features from
+surfaces
+(
+    "buildings.stl"
+);
+
+// Identify a feature when angle between faces < includedAngle
+includedAngle   150;
+
+// Write options for feature visualization and debugging
+writeObj        yes;
+writeVTK        yes;
+
+// Advanced feature extraction controls (optional)
+geometricTestOnly   yes;
+
+// Minimum feature edge length (optional - removes short edges)
+minLen          0.0;
+
+// Minimum number of elements in a feature line (optional)
+minElems        0;
+
+// Write extended feature edge mesh format
+writeFeatureEdgeMesh    yes;
+// ************************************************************************* //
