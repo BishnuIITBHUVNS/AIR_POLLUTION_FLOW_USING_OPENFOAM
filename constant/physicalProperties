@@ -1,0 +1,62 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      physicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Required for OpenFOAM v11+ fluid module
+thermoType
+{
+    type            heRhoThermo;  // Density-based thermo
+    mixture         pureMixture;  // Single-component fluid
+    transport       const;        // Constant transport properties
+    thermo          hConst;       // Constant Cp
+    equationOfState Boussinesq;   // Boussinesq approximation
+    specie          specie;       // Specie properties
+    energy          sensibleEnthalpy;
+}
+
+mixture
+{
+    specie
+    {
+        nMoles      1;          // [-]
+        molWeight   28.9;       // Air molecular weight [g/mol]
+    }
+	equationOfState
+    {
+        rho0        1.225;      // Reference density [kg/m³] @ 15°C
+        T0          288.15;     // Reference temperature [K]
+        beta        3.43e-3;    // Thermal expansion coeff [1/K]
+    }
+    
+    thermodynamics
+    {
+        Cp          1005;       // Specific heat [J/kg·K]
+        Hf          0;          // Enthalpy of formation [J/kg]
+    }
+    
+    transport
+    {
+        mu          1.8e-05;    // Dynamic viscosity [Pa·s]
+        Pr          0.71;       // Prandtl number [-]
+    }
+}
+//Original parameters (keep these)
+
+beta            3.43e-3;
+TRef            288.15;
+nu              1.5e-05;
+Pr              0.71;
+
+// ************************************************************************* //

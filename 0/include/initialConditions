@@ -1,0 +1,25 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+// Initial conditions for atmospheric boundary layer flow
+
+// Flow parameters
+flowVelocity            (10 0 0);
+pressure                0;
+temperature             288.15;
+
+// Turbulence parameters
+turbulentKE             1.5;        // k = 1.5 m^2/s^2
+turbulentOmega          10.0;       // omega = 10 s^-1
+
+// Atmospheric boundary layer parameters  
+Uref                    10.0;       // Reference velocity at reference height
+Zref                    10.0;       // Reference height
+z0                      0.1;        // Surface roughness length
+
+// ************************************************************************* //

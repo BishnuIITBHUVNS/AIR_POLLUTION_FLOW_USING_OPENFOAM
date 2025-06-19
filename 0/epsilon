@@ -1,0 +1,80 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   uniform 1.35;  // epsilon = Cmu^0.75 * k^1.5 / l
+
+boundaryField
+{
+    buildings
+    {
+        type            epsilonWallFunction;
+        value           uniform 1.35;
+    }
+    
+    atmosphere
+    {
+        type            inletOutlet;
+        inletValue      uniform 1.35;
+        value           uniform 1.35;
+    }
+    
+    ground
+    {
+        type            epsilonWallFunction;
+        value           uniform 1.35;
+    }
+    inlet
+    {
+        type            atmBoundaryLayerInletEpsilon;
+        flowDir         (1 0 0);
+        zDir            (0 0 1);
+        Uref            15.0;
+        Zref            10.0;
+        z0              uniform 0.3;
+		zGround         uniform 0.0;
+        d               uniform 0.0;
+        value           uniform 1.0;
+    }
+    
+    outlet
+    {
+        type            inletOutlet;
+        inletValue      uniform 1.35;
+        value           uniform 1.35;
+    }
+    
+    sides
+    {
+        type            symmetry;
+    // No value entry required for symmetry BC
+    }
+    top
+    {
+        type            inletOutlet;
+        inletValue      uniform 1.35;
+        value           uniform 1.35;
+    }
+    
+    defaultFaces
+    {
+        type            empty;
+    }
+}
+
+
+// ************************************************************************* //
