@@ -4,7 +4,7 @@
 
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColorscription
 
-This repository contains an OpenFOAM-based computational fluid dynamics (CFD) simulation for modeling air pollution flow around tall buildings in urban environments [1]. The project implements a passive scalar transport equation to simulate pollutant dispersion in complex building geometries, providing valuable insights into air quality assessment and urban planning [2][3].
+This repository contains an OpenFOAM-based computational fluid dynamics (CFD) simulation for modeling air pollution flow around tall buildings in urban environments . The project implements a passive scalar transport equation to simulate pollutant dispersion in complex building geometries, providing valuable insights into air quality assessment and urban planning .
 
 ## Table of Contents
 
@@ -27,9 +27,9 @@ This repository contains an OpenFOAM-based computational fluid dynamics (CFD) si
 
 ## Prerequisites
 
-- Windows 10/11 with WSL2 support [4]
+- Windows 10/11 with WSL2 support 
 - At least 8GB RAM and 20GB free disk space
-- Basic understanding of fluid dynamics and CFD concepts [5]
+  
 
 ## Installation Guide
 
@@ -41,32 +41,32 @@ This repository contains an OpenFOAM-based computational fluid dynamics (CFD) si
    wsl -l -v
    ```
 
-2. **Install WSL with Ubuntu 22.04** [4]
+2. **Install WSL with Ubuntu 22.04** 
    ```bash
    wsl --install -d Ubuntu-22.04
    ```
 
-3. **Configure Ubuntu** [6]
+3. **Configure Ubuntu** 
    - When prompted, create a username and password
    - After installation, verify the installation:
    ```bash
    wsl -l -v
    ```
 
-4. **Start WSL** [4]
+4. **Start WSL** 
    ```bash
    wsl
    ```
 
 ### Installing OpenFOAM
 
-1. **Add OpenFOAM Repository** [6]
+1. **Add OpenFOAM Repository** 
    ```bash
    curl https://dl.openfoam.com/add-debian-repo.sh | sudo bash
    sudo apt-get update
    ```
 
-2. **Install OpenFOAM** [6]
+2. **Install OpenFOAM** 
    ```bash
    # Install latest version
    sudo apt-get install openfoam-default
@@ -75,7 +75,7 @@ This repository contains an OpenFOAM-based computational fluid dynamics (CFD) si
    sudo apt-get install openfoam2312-default
    ```
 
-3. **Set up Environment Variables** [6]
+3. **Set up Environment Variables** 
    ```bash
    # Add OpenFOAM function to bash aliases
    wget https://raw.githubusercontent.com/jakobhaervig/openfoam-installer/main/.bash_aliases -O - >> $HOME/.bash_aliases
@@ -86,7 +86,7 @@ This repository contains an OpenFOAM-based computational fluid dynamics (CFD) si
 
 ### Verification
 
-Test the installation by running a simple tutorial [6]:
+Test the installation by running a simple tutorial :
 ```bash
 # Create working directory
 mkdir -p $HOME/OpenFOAM/$USER-run
@@ -103,7 +103,7 @@ icoFoam
 
 ### Directory Structure
 
-The OpenFOAM case follows the standard structure [7]:
+The OpenFOAM case follows the standard structure :
 
 ```
 airPollutionBuildings/
@@ -127,12 +127,12 @@ airPollutionBuildings/
 
 ### Mesh Generation
 
-1. **Create Background Mesh** [8]
+1. **Create Background Mesh** 
    ```bash
    blockMesh
    ```
 
-2. **Generate Complex Geometry with snappyHexMesh** [8][9]
+2. **Generate Complex Geometry with snappyHexMesh** 
    ```bash
    # Extract surface features
    surfaceFeatures
@@ -141,14 +141,14 @@ airPollutionBuildings/
    snappyHexMesh -overwrite
    ```
 
-3. **Check Mesh Quality** [8]
+3. **Check Mesh Quality** 
    ```bash
    checkMesh
    ```
 
 ### Boundary Conditions
 
-Configure boundary conditions for urban flow simulation [10]:
+Configure boundary conditions for urban flow simulation :
 
 **Inlet (Wind):**
 ```cpp
@@ -174,18 +174,18 @@ pollutantSource
 
 ### Solver Configuration
 
-Use a modified solver for pollutant transport [11][12]:
+Use a modified solver for pollutant transport :
 - Base solver: `buoyantBoussinesqPimpleFoam` or `simpleFoam`
-- Additional passive scalar transport equation for pollutant [12]
+- Additional passive scalar transport equation for pollutant 
 
 ## Running the Simulation
 
-1. **Decompose Case for Parallel Processing** [6]
+1. **Decompose Case for Parallel Processing** 
    ```bash
    decomposePar
    ```
 
-2. **Run Simulation** [11]
+2. **Run Simulation** 
    ```bash
    # Serial execution
    simpleFoam
@@ -194,7 +194,7 @@ Use a modified solver for pollutant transport [11][12]:
    mpirun -np 4 simpleFoam -parallel
    ```
 
-3. **Reconstruct Results** [6]
+3. **Reconstruct Results** 
    ```bash
    reconstructPar
    ```
@@ -203,17 +203,17 @@ Use a modified solver for pollutant transport [11][12]:
 
 ### Using ParaView
 
-1. **Create ParaView File** [13][14]
+1. **Create ParaView File** 
    ```bash
    touch case.foam
    ```
 
-2. **Launch ParaView** [13]
+2. **Launch ParaView** 
    ```bash
    paraview case.foam
    ```
 
-3. **Visualization Options** [13]:
+3. **Visualization Options** :
    - Contour plots for pollutant concentration
    - Vector plots for velocity fields
    - Streamlines for flow visualization
@@ -221,13 +221,13 @@ Use a modified solver for pollutant transport [11][12]:
 
 ### Command Line Post-Processing
 
-1. **Sample Data** [13]
+1. **Sample Data** 
    ```bash
    postProcess -func probes
    postProcess -func surfaces
    ```
 
-2. **Extract Data** [13]
+2. **Extract Data** 
    ```bash
    foamToVTK
    ```
@@ -236,48 +236,48 @@ Use a modified solver for pollutant transport [11][12]:
 
 ### Common Issues and Solutions
 
-1. **Segmentation Fault** [15]
+1. **Segmentation Fault** 
    - **Cause**: Memory access outside bounds
    - **Solution**: Recompile with debug mode and check array bounds
    ```bash
    export WM_COMPILE_OPTION=Debug
    ```
 
-2. **Syntax Errors** [16]
+2. **Syntax Errors** 
    - **Cause**: Missing semicolons or brackets in dictionary files
    - **Solution**: Check error messages carefully and verify file syntax
    ```bash
    # Error usually indicates file and line number
    ```
 
-3. **Mesh Quality Issues** [15]
+3. **Mesh Quality Issues** 
    - **Cause**: Poor mesh quality affecting convergence
    - **Solution**: Refine mesh settings in `snappyHexMeshDict`
    ```bash
    checkMesh
    ```
 
-4. **Convergence Problems** [15]
+4. **Convergence Problems** 
    - **Cause**: Inappropriate solver settings or boundary conditions
    - **Solution**: Adjust relaxation factors and solver tolerances in `fvSolution`
 
-5. **WSL Installation Errors** [6]
+5. **WSL Installation Errors** 
    - **Error**: `WslRegisterDistribution failed with error: 0x80370114`
    - **Solution**: Enable "Windows Hypervisor Platform" in Windows features
 
 ### Debugging Tips
 
-1. **Check Log Files** [15]
+1. **Check Log Files** 
    ```bash
    tail -f log.simpleFoam
    ```
 
-2. **Validate Case Setup** [17]
+2. **Validate Case Setup** 
    ```bash
    foamToVTK -check
    ```
 
-3. **Monitor Residuals** [15]
+3. **Monitor Residuals** 
    ```bash
    foamLog log.simpleFoam
    gnuplot residuals.plt
@@ -285,7 +285,7 @@ Use a modified solver for pollutant transport [11][12]:
 
 ## Results and Visualization
 
-The simulation provides insights into [1][18]:
+The simulation provides insights into :
 - Pollutant concentration distribution around buildings
 - Flow patterns in urban canyon environments
 - Wind velocity fields and turbulence characteristics
@@ -299,20 +299,20 @@ Typical results include:
 
 ## Performance Considerations
 
-- **Mesh Size**: Balance between accuracy and computational cost [18]
-- **Parallel Processing**: Use domain decomposition for large cases [18]
-- **Time Step**: Ensure Courant number < 1 for stability [15]
-- **Turbulence Modeling**: k-ε model recommended for urban flows [11]
+- **Mesh Size**: Balance between accuracy and computational cost.
+- **Parallel Processing**: Use domain decomposition for large cases.
+- **Time Step**: Ensure Courant number < 1 for stability.
+- **Turbulence Modeling**: k-ε model recommended for urban flows.
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details [19][20].
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details .
 
 ## Acknowledgments
 
-- OpenFOAM Foundation for the open-source CFD software [19]
-- Contributors to the OpenFOAM community tutorials [21]
-- Research works on urban air pollution modeling [1][2][3]
+- OpenFOAM Foundation for the open-source CFD software .
+- Contributors to the OpenFOAM community tutorials.
+- Research works on urban air pollution modeling.
 
 ## Contact
 
