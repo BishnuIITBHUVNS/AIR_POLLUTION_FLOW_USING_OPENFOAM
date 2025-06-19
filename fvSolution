@@ -1,0 +1,163 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+solvers
+{
+    p
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-06;
+        relTol          0.05;
+        maxIter         2000;
+    }
+
+    p_rgh
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-06;
+        relTol          0.01;
+    }
+    p_rghFinal
+    {
+        $p_rgh;
+        relTol          0;
+    }
+	pFinal
+	{
+	    $p;
+		relTol           0;
+    }
+
+    U
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-05;
+        relTol          0.1;
+    }
+
+    UFinal
+    {
+        $U;
+        relTol          0;
+    }
+	 T
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-06;
+        relTol          0.1;
+    }
+
+    TFinal
+    {
+        $T;
+        relTol          0;
+    }
+
+    "(k|epsilon|nut|alphat)"
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-8;
+        relTol          0.1;
+    }
+    "(k|epsilon|nut|alphat)Final"
+    {
+        $k;
+        relTol          0;
+    }
+	rho
+    {
+        solver          diagonal;  // Required for compressible solvers
+        tolerance       1e-5;
+        relTol          0.1;
+    }
+	rhoFinal
+	{
+	    $rho;
+		relTol           0;
+	}
+
+    omega
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-5;
+        relTol          0.1;
+    }
+
+    omegaFinal
+    {
+        $omega;
+        relTol          0;
+		}
+    h
+   {
+    solver          PBiCGStab;
+    preconditioner  DILU;
+    tolerance       1e-06;
+    relTol          0.1;
+    }
+
+    hFinal
+    {
+    $h;
+    relTol          0;
+    }
+	C
+    {
+    solver          PBiCGStab;
+    preconditioner  DILU;
+    tolerance       1e-06;
+    relTol          0.1;
+    }
+
+   CFinal
+   {
+    $C;
+    relTol          0;
+    }
+}
+
+PIMPLE
+{
+    nOuterCorrectors        2;
+    nCorrectors             1;
+    nNonOrthogonalCorrectors 0;
+    
+    residualControl
+    {
+        p               1e-4;
+        U               1e-4;
+		rho             1e-4;
+    }
+}
+
+relaxationFactors
+{
+    fields
+    {
+        p               0.3;
+	}
+    equations
+    {
+        U               0.7;
+    }
+}
+// ************************************************************************* //
+

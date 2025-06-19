@@ -1,0 +1,179 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// Which phases to run
+castellatedMesh true;
+snap            true;
+addLayers       true;
+
+// Geometry definition
+geometry
+{
+    buildings.stl
+    {
+        type triSurfaceMesh;
+        name buildings;
+        file "buildings.stl";
+        tolerance 1e-5;
+        maxTreeDepth 10;
+        //regions
+        //{
+        //    building1
+        //    {
+         //       name building1_wall;
+           // }
+			 //building2
+            //{
+              //  name building2_wall;
+            //}
+            //building3
+            //{
+            //    name building3_wall;
+            //}
+            //building4
+            //{
+              //  name building4_wall;
+            //}
+            //building5
+            //{
+              //  name building5_wall;
+            //}
+        //}
+    }
+}
+
+// Settings for the castellatedMesh generation
+castellatedMeshControls
+{
+    maxLocalCells 1000000;
+    maxGlobalCells 5000000;
+    minRefinementCells 10;
+    maxLoadUnbalance 0.10;
+    nCellsBetweenLevels 2;
+	resolveFeatureAngle 150;
+
+    // Explicit feature edge refinement
+    features
+    (
+        {
+            file "buildings.eMesh";
+            level 3;
+        }
+    );
+
+    // Surface refinement
+    refinementSurfaces
+    {
+        buildings
+        {level (2 3);
+            patchInfo
+            {
+                type wall;
+                inGroups (buildingGroup);
+            }
+        }
+    }
+
+    // Volume refinement zones
+    refinementRegions
+    {
+        // Street canyon refinement
+        streetCanyon
+        {
+            mode inside;
+            levels ((1E15 2));
+        }
+        
+        // Wake region refinement
+        wakeRegion{
+            mode inside;
+            levels ((1E15 1));
+        }
+    }
+
+    // Location to keep cells
+    locationInMesh (125 100 100);
+
+    allowFreeStandingZoneFaces true;
+}
+
+// Settings for the snapping
+snapControls
+{
+    nSmoothPatch 3;
+    tolerance 2.0;
+    nSolveIter 300;
+    nRelaxIter 5;
+    
+    // Feature snapping controls
+    nFeatureSnapIter 10;
+    implicitFeatureSnap false;
+    explicitFeatureSnap true;
+    multiRegionFeatureSnap false;
+}
+
+// Settings for the layer addition
+addLayersControls
+{
+    relativeSizes true;
+
+    layers
+    {
+        "building.*_wall"
+        {
+            nSurfaceLayers 3;
+        }
+    }
+	expansionRatio 1.2;
+    finalLayerThickness 0.3;
+    minThickness 0.1;
+    nGrow 0;
+    featureAngle 130;
+    slipFeatureAngle 30;
+    nRelaxIter 3;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedianAxisAngle 130;
+    nBufferCellsNoExtrude 0;
+    nLayerIter 50;
+}
+
+// Generic mesh quality controls
+meshQualityControls
+{
+    maxNonOrtho 65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave 80;
+    minVol 1e-13;
+    minTetQuality 1e-15;
+    minArea -1;
+    minTwist 0.02;
+    minDeterminant 0.001;
+    minFaceWeight 0.02;
+    minVolRatio 0.01;
+    minTriangleTwist -1;
+    nSmoothScale 4;
+    errorReduction 0.75;
+}
+
+// Advanced settings
+debug 0;
+mergeTolerance 1e-6;
+
+
+// ************************************************************************* //
